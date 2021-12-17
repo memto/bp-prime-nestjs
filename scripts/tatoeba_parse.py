@@ -73,38 +73,30 @@ def index_sentences_audio(csv_file):
 
     db_con.commit()
 
-def process_data_and_gen_csv(out_csv_file):
-  query_audio = """
-  SELECT sa.id FROM sentences_audio sa 
-    JOIN sentences s ON sa.id = s.id where s.lang = '{0}'
-  """.format(FROM_LANG)
-  
-  query_link_fmt = """
+def process_data_and_gen_csv(out_csv_file):  
+  query = """
   SELECT from_s.id, from_s.sentence, to_s.id, to_s.sentence FROM links l 
     INNER JOIN sentences from_s ON l.from_id = from_s.id 
     INNER JOIN sentences to_s ON l.to_id = to_s.id 
-  WHERE 
-    from_s.lang = '{0}'
+  WHERE
+    l.from_id in (
+      SELECT sa.id FROM sentences_audio sa 
+      JOIN sentences s ON sa.id = s.id where s.lang = '{0}'
+    )
     and to_s.lang = '{1}'
-    and l.from_id = {2}
-  """
+  """.format(FROM_LANG, TO_LANG)
   
   with open(out_csv_file, 'w', newline='') as csvfile:
       csv_writer = csv.writer(csvfile, delimiter='\t',
-                              quotechar='"', quoting=csv.QUOTE_MINIMAL)          
+                              quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-      db_cur_link = db_con.cursor()
-      for row_audio in db_cur.execute(query_audio):
-        (sentence_id,) = row_audio
-        query_link = query_link_fmt.format(FROM_LANG, TO_LANG, sentence_id)
-        db_cur_link.execute(query_link)
-        row_link = db_cur_link.fetchone()
-        if row_link != None:
-          print(row_link)
-          (id, text, translate_id, translate_text) = row_link
-          audio_url = AUDIO_URL_PREFIX + "/{0}/{1}.mp3".format(FROM_LANG, id)
-          csv_writer.writerow([id, text, audio_url, translate_id, translate_text])
-          # break
+      for row_link in db_cur.execute(query):
+        print(row_link)
+        # break #== TO_TEST
+        (id, text, translate_id, translate_text) = row_link
+        audio_url = AUDIO_URL_PREFIX + "/{0}/{1}.mp3".format(FROM_LANG, id)
+        csv_writer.writerow([id, text, audio_url, translate_id, translate_text])
+        
 
 def now_str():
   from datetime import datetime
