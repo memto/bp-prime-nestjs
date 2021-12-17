@@ -103,11 +103,11 @@ def now_str():
   return datetime.now().strftime("%H:%M:%S")
 
 if __name__ == '__main__':
-  # print("indexing...", now_str())
-  # index_sentences(sentences_csv)
-  # index_links(links_csv)
-  # index_sentences_audio(sentences_with_audio_csv)
-  # print("indexing done", now_str())
+  print("indexing...", now_str())
+  index_sentences(sentences_csv)
+  index_links(links_csv)
+  index_sentences_audio(sentences_with_audio_csv)
+  print("indexing done", now_str())
 
   # ==
   print("process data...", now_str())
