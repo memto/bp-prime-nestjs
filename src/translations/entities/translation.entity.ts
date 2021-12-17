@@ -11,7 +11,7 @@ export class Translation {
   @Column()
   audio_url: string;
 
-  @Column()
+  @PrimaryColumn()
   translate_id: number;
 
   @Column()
