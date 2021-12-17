@@ -22,7 +22,7 @@ $ docker run -d \
     postgres:12
 ```
 
-## Sync schema
+## Sync schema (this will create tables into database)
 
 ```bash
 $ npm run schema:sync
@@ -50,3 +50,10 @@ $ npm run start:prod
 1. Install the insomnia app (postman like) (https://insomnia.rest/download)
 2. Import the `endpoints.json` file
 3. Enjoy
+
+## Import DB
+
+```bash
+$ sudo docker cp <path_to_generated_csv> app_postgres_dev:/tmp/output.csv
+$ sudo docker exec app_postgres_dev psql -U postgres -d postgres -c "\copy translation FROM '/tmp/output.csv' DELIMITER E'\t'"
+```
