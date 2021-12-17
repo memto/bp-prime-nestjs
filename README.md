@@ -15,7 +15,7 @@ $ npm install
 ```bash
 $ docker run -d \
     --name app_postgres_dev \
-    -p 9432:5432
+    -p 9432:5432 \
     -e POSTGRES_PASSWORD=123456a@ \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -v <custom-path>:/var/lib/postgresql/data \
