@@ -1,9 +1,3 @@
-## Quick Setup (Production)
-
-```bash
-bash ./setup.sh
-```
-
 ## Installation (Development)
 
 ```bash
@@ -28,7 +22,6 @@ $ docker run -d \
 $ npm run schema:sync
 ```
 
-
 ## Running the app
 
 ```bash
@@ -45,15 +38,44 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Endpoints (API test)
-
-1. Install the insomnia app (postman like) (https://insomnia.rest/download)
-2. Import the `endpoints.json` file
-3. Enjoy
-
 ## Import DB
 
 ```bash
 $ sudo docker cp <path_to_generated_csv> app_postgres_dev:/tmp/output.csv
 $ sudo docker exec app_postgres_dev psql -U postgres -d postgres -c "\copy translation FROM '/tmp/output.csv' DELIMITER E'\t'"
 ```
+
+- Import to https://customer.elephantsql.com/instance
+```bash
+$ cd scripts
+$ sudo apt install python3-venv
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+# config .env
+$ python ./import_db.py <CSV_FILE> <TABLE_NAME>
+```
+
+## Heroku deploy
+
+```bash
+$ heroku config -a century-be-demo
+
+=== century-be-demo Config Vars
+NODE_ENV:              production
+NPM_CONFIG_PRODUCTION: false
+POSTGRES_DB:           <POSTGRES_DB>
+POSTGRES_HOST:         <POSTGRES_HOST>
+POSTGRES_PASSWORD:     <POSTGRES_PASSWORD>
+POSTGRES_PORT:         <POSTGRES_PORT>
+POSTGRES_SSL:          <POSTGRES_SSL>
+POSTGRES_USER:         <POSTGRES_USER>
+PRIVATE_KEY:           <PRIVATE_KEY>
+PUBLIC_KEY:            <PUBLIC_KEY>
+```
+
+## Endpoints (API test)
+
+1. Install the insomnia app (postman like) (https://insomnia.rest/download)
+2. Import the `Insomnia_2021-12-17.json` file
+3. Enjoy
